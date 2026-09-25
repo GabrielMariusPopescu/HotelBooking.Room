@@ -1,4 +1,6 @@
-﻿namespace Room.Persistence.Repositories;
+﻿using System.Linq.Expressions;
+
+namespace Room.Persistence.Repositories;
 
 public class Repository<T>(RoomDbContext context) : IRepository<T> where T : class
 {
@@ -17,6 +19,9 @@ public class Repository<T>(RoomDbContext context) : IRepository<T> where T : cla
 
     public async Task<T?> Get(Guid id, CancellationToken cancellationToken) 
         => await context.Set<T>().FindAsync(id, cancellationToken);
+
+    public async Task<bool> Any(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
+        => await context.Set<T>().AnyAsync(predicate, cancellationToken);
 
     public async Task<bool> Update(T entity, CancellationToken cancellationToken)
     {

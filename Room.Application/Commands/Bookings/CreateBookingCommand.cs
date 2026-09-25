@@ -4,8 +4,7 @@ public class CreateBookingCommand(
     DateOnly checkIn,
     DateOnly checkOut,
     int guests,
-    decimal totalPrice,
-    BookingStatus bookingStatus) : IRequest<Response<Booking>>
+    IEnumerable<Guid> roomIds) : IRequest<Response<Booking>>
 {
     public DateOnly CheckIn { get; set; } = checkIn;
 
@@ -13,7 +12,5 @@ public class CreateBookingCommand(
 
     public int Guests { get; set; } = guests;
 
-    public decimal TotalPrice { get; set; } = totalPrice;
-
-    public BookingStatus BookingStatus { get; set; } = bookingStatus;
+    public IEnumerable<Guid> RoomIds { get; set; } = roomIds;
 }

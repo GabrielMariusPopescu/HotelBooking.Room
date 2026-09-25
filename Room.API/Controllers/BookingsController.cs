@@ -14,8 +14,7 @@ public class BookingsController(ISender mediator) : ControllerBase
             request.CheckIn,
             request.CheckOut,
             request.Guests,
-            request.TotalPrice,
-            Enum.Parse<BookingStatus>(request.BookingStatus));
+            request.RoomIds);
         
         var response = await mediator.Send(command);
         return response.IsSuccessful

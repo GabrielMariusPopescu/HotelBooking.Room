@@ -8,7 +8,5 @@ public class CreateBookingRequest
 
     public int Guests { get; set; }
 
-    public decimal TotalPrice { get; set; }
-
-    public required string BookingStatus { get; set; }
+    public IEnumerable<Guid> RoomIds { get; set; } = Enumerable.Empty<Guid>();
 }

@@ -1,4 +1,6 @@
-﻿namespace Room.Application.Repositories;
+﻿using System.Linq.Expressions;
+
+namespace Room.Application.Repositories;
 
 public interface IRepository<T> where T: class
 {
@@ -8,6 +10,8 @@ public interface IRepository<T> where T: class
     
     Task<T?> Get(Guid id, CancellationToken cancellationToken);
 
+    Task<bool> Any(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken);
+    
     Task<bool> Update(T entity, CancellationToken cancellationToken);
 
     Task<bool> Disable(T entity, CancellationToken cancellationToken);
