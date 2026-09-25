@@ -14,7 +14,22 @@ public class Booking : BaseEntity
 
     public decimal TotalPrice { get; set; }
 
-    public required string BookingStatus { get; set; }
+    public string BookingStatus { get; set; }
 
     public ICollection<BookingItem> BookingItems { get; set; } = new List<BookingItem>();
+
+    public Booking()
+    {
+        
+    }
+    
+    public Booking(DateOnly checkIn, DateOnly checkOut, int guests, decimal totalPrice, string bookingStatus)
+    {
+        Created = DateTime.UtcNow;
+        CheckIn = checkIn;
+        CheckOut = checkOut;
+        Guests = guests;
+        TotalPrice = totalPrice;
+        BookingStatus = bookingStatus;
+    }
 }

@@ -1,4 +1,4 @@
-﻿namespace Room.Application.Queries;
+﻿namespace Room.Application.Queries.Rooms;
 
 public class GetRoomsQueryHandler(IRepository<Domain.Models.Room> repository): IRequestHandler<GetRoomsQuery, Response<IEnumerable<Domain.Models.Room>>>
 {

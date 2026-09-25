@@ -1,4 +1,4 @@
-﻿namespace Room.Application.Commands;
+﻿namespace Room.Application.Commands.Rooms;
 
 public class DeleteRoomCommandHandler(IRepository<Domain.Models.Room> repository): IRequestHandler<DeleteRoomCommand, Response<Guid>>
 {
@@ -11,8 +11,8 @@ public class DeleteRoomCommandHandler(IRepository<Domain.Models.Room> repository
         dbRoom.IsExcluded = true;
         dbRoom.LastUpdated = DateTime.UtcNow;
         
-        var deleted = await repository.Disable(dbRoom, cancellationToken);
-        return deleted
+        var disabled = await repository.Disable(dbRoom, cancellationToken);
+        return disabled
             ? Response<Guid>.Success(dbRoom.Id)
             : Response<Guid>.Failure($"Room with '{request.Id}' identifier could not be disabled.");
     }

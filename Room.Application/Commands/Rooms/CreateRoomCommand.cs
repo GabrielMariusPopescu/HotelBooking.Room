@@ -1,15 +1,12 @@
-﻿namespace Room.Application.Commands;
+﻿namespace Room.Application.Commands.Rooms;
 
-public class UpdateRoomCommand(
-    Guid id,
+public class CreateRoomCommand(
     string name,
     int number,
     RoomType roomType,
     RoomStatus roomStatus,
     decimal pricePerNight) : IRequest<Response<Domain.Models.Room>>
 {
-    public Guid Id { get; } = id;
-
     public string Name { get; } = name;
 
     public int Number { get; } = number;

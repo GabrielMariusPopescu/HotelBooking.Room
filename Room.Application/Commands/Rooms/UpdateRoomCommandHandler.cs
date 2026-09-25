@@ -1,4 +1,4 @@
-﻿namespace Room.Application.Commands;
+﻿namespace Room.Application.Commands.Rooms;
 
 public class UpdateRoomCommandHandler(IRepository<Domain.Models.Room> repository): IRequestHandler<UpdateRoomCommand, Response<Domain.Models.Room>>
 {

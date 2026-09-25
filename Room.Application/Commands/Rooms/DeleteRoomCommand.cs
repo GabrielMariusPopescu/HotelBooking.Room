@@ -1,4 +1,4 @@
-﻿namespace Room.Application.Commands;
+﻿namespace Room.Application.Commands.Rooms;
 
 public class DeleteRoomCommand(Guid id): IRequest<Response<Guid>>
 {

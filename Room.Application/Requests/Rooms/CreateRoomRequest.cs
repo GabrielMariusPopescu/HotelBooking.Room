@@ -1,6 +1,6 @@
-﻿namespace Room.Application.Requests;
+﻿namespace Room.Application.Requests.Rooms;
 
-public class UpdateRoomRequest
+public class CreateRoomRequest
 {
     public required string Name { get; set; }
 

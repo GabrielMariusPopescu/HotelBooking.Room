@@ -1,4 +1,4 @@
-﻿namespace Room.Application.Commands;
+﻿namespace Room.Application.Commands.Rooms;
 
 public class CreateRoomCommandHandler(IRepository<Domain.Models.Room> repository): IRequestHandler<CreateRoomCommand, Response<Domain.Models.Room>>
 {
