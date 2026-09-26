@@ -4,7 +4,7 @@ public class DeleteRoomCommandHandler(IRepository<Domain.Models.Room> repository
 {
     public async Task<Response<Guid>> Handle(DeleteRoomCommand request, CancellationToken cancellationToken)
     {
-        var dbRoom = await repository.Get(request.Id, cancellationToken);
+        var dbRoom = await repository.Get(request.Id, includeRelations: false, cancellationToken);
         if (dbRoom == null)
             return Response<Guid>.Failure($"Room with '{request.Id}' identifier could not be found.");
 

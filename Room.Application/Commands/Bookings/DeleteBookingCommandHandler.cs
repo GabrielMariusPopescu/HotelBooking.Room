@@ -4,7 +4,7 @@ public class DeleteBookingCommandHandler(IRepository<Booking> repository) : IReq
 {
     public async Task<Response<Guid>> Handle(DeleteBookingCommand request, CancellationToken cancellationToken)
     {
-        var dbBooking = await repository.Get(request.Id, cancellationToken);
+        var dbBooking = await repository.Get(request.Id, includeRelations: false, cancellationToken);
         if (dbBooking == null)
             return Response<Guid>.Failure($"Booking with '{request.Id}' identifier could not be found.");
 

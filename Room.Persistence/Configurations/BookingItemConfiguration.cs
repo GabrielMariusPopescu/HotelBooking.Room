@@ -7,6 +7,7 @@ public class BookingItemConfiguration : IEntityTypeConfiguration<BookingItem>
         builder.HasKey(bookingItem => bookingItem.Id);
         builder.Property(bookingItem => bookingItem.PricePerNight)
             .HasPrecision(18, 2);
+        
         builder.HasOne(bookingItem => bookingItem.Booking)
             .WithMany(booking => booking.BookingItems)
             .HasForeignKey(bookingItem => bookingItem.BookingId)

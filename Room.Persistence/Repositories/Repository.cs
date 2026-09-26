@@ -1,8 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Room.Persistence.Repositories;
 
-public class Repository<T>(RoomDbContext context) : IRepository<T> where T : class
+public class Repository<T>(RoomDbContext context) : IRepository<T> where T : BaseEntity
 {
     public async Task<T?> Add(T entity, CancellationToken cancellationToken)
     {
@@ -17,8 +18,14 @@ public class Repository<T>(RoomDbContext context) : IRepository<T> where T : cla
         return entities.Any() ? entities : Enumerable.Empty<T>();
     }
 
-    public async Task<T?> Get(Guid id, CancellationToken cancellationToken) 
-        => await context.Set<T>().FindAsync(id, cancellationToken);
+    public async Task<T?> Get(Guid id, bool includeRelations, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes)
+    {
+        IQueryable<T> query = context.Set<T>();
+        if (includeRelations)
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+
+        return await query.FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
+    }
 
     public async Task<bool> Any(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
         => await context.Set<T>().AnyAsync(predicate, cancellationToken);

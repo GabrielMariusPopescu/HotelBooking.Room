@@ -4,7 +4,7 @@ public class UpdateRoomCommandHandler(IRepository<Domain.Models.Room> repository
 {
     public async Task<Response<Domain.Models.Room>> Handle(UpdateRoomCommand request, CancellationToken cancellationToken)
     {
-        var dbRoom = await repository.Get(request.Id, cancellationToken);
+        var dbRoom = await repository.Get(request.Id, includeRelations: false,  cancellationToken);
         if (dbRoom == null)
             return Response<Domain.Models.Room>.Failure($"Room with '{request.Id}' identifier could not be found.");
         

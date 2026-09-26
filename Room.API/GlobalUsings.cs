@@ -13,3 +13,4 @@ global using Room.Application.Responses;
 global using Room.Domain.Enums;
 global using Room.Domain.Models;
 global using Room.Persistence;
+global using System.Text.Json.Serialization;

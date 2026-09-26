@@ -1,14 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿namespace Room.Application.Repositories;
 
-namespace Room.Application.Repositories;
-
-public interface IRepository<T> where T: class
+public interface IRepository<T> where T: BaseEntity
 {
     Task<T?> Add(T entity, CancellationToken cancellationToken);
     
     Task<IEnumerable<T>> Get(CancellationToken cancellationToken);
     
-    Task<T?> Get(Guid id, CancellationToken cancellationToken);
+    Task<T?> Get(Guid id, bool includeRelations, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes);
 
     Task<bool> Any(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken);
     
