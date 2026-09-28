@@ -1,13 +1,13 @@
 ﻿namespace Room.API.Tests.Controllers;
 
 [ExcludeFromCodeCoverage]
-public class RoomControllerTests
+public class RoomsControllerTests
 {
     private readonly Mock<ISender> _mediatorMock;
 
     private readonly RoomsController _sut;
 
-    public RoomControllerTests()
+    public RoomsControllerTests()
     {
         _mediatorMock = new Mock<ISender>();
         _sut = new RoomsController(_mediatorMock.Object);

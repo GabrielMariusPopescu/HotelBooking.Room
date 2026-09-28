@@ -51,6 +51,7 @@ public class BookingsController(ISender mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateBooking(Guid id, [FromBody] UpdateBookingRequest request)
     {
+        request.Id = id;
         var command = new UpdateBookingCommand(
             id,
             request.CheckIn,
