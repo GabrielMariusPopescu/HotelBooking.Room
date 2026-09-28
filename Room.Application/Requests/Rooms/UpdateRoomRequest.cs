@@ -2,6 +2,8 @@
 
 public class UpdateRoomRequest
 {
+    public required Guid Id { get; set; }
+    
     public required string Name { get; set; }
 
     public required int Number { get; set; }

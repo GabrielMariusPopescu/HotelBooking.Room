@@ -52,8 +52,9 @@ public class RoomsController(ISender mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateRoom(Guid id, [FromBody] UpdateRoomRequest request)
     {
+        request.Id = id;
         var command = new UpdateRoomCommand(
-            id,
+            request.Id,
             request.Name,
             request.Number,
             Enum.Parse<RoomType>(request.RoomType),

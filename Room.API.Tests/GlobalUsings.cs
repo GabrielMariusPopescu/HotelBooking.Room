@@ -1,0 +1,23 @@
+// Global using directives
+
+global using FluentAssertions;
+global using MediatR;
+global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.Testing;
+global using Microsoft.AspNetCore.TestHost;
+global using Microsoft.Data.Sqlite;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.DependencyInjection;
+global using Moq;
+global using Room.API.Controllers;
+global using Room.API.Tests;
+global using Room.Application.Commands.Rooms;
+global using Room.Application.Extensions;
+global using Room.Application.Queries.Rooms;
+global using Room.Application.Requests.Rooms;
+global using Room.Application.Responses;
+global using Room.Domain.Enums;
+global using Room.Persistence;
+global using System.Diagnostics.CodeAnalysis;
