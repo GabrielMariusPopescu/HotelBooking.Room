@@ -22,6 +22,7 @@ global using Room.Application.Requests.Bookings;
 global using Room.Application.Requests.Rooms;
 global using Room.Application.Responses;
 global using Room.Domain.Enums;
+global using Room.Domain.Models;
 global using Room.Persistence;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Net;

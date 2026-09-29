@@ -1,4 +1,6 @@
-﻿namespace Room.Application;
+﻿using Room.Application.Validators.Rooms;
+
+namespace Room.Application;
 
 public static class ApplicationServicesRegistration
 {

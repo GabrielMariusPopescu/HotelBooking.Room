@@ -7,7 +7,7 @@ public class BookingsController(ISender mediator) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(typeof(Response<Booking>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateBooking([FromBody] CreateBookingRequest request)
     {
         var command = new CreateBookingCommand(

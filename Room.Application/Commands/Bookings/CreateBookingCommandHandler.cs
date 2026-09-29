@@ -23,11 +23,10 @@ public class CreateBookingCommandHandler(
         Booking booking = new(
             request.CheckIn,
             request.CheckOut,
-            request.Guests)
+            request.Guests,
+            totalPrice,
+            BookingStatus.Pending.GetDisplayName())
         {
-            TotalPrice = totalPrice,
-            Created = DateTime.UtcNow,
-            BookingStatus = BookingStatus.Pending.GetDisplayName(),
             BookingItems = bookingItems
         };
 

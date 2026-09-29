@@ -1,4 +1,4 @@
-﻿namespace Room.Application.Validators;
+﻿namespace Room.Application.Validators.Rooms;
 
 public class CreateRoomCommandValidator : AbstractValidator<CreateRoomCommand>
 {

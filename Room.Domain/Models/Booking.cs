@@ -30,4 +30,14 @@ public class Booking : BaseEntity
         CheckOut = checkOut;
         Guests = guests;
     }
+
+    public Booking(DateOnly checkIn, DateOnly checkOut, int guests, decimal totalPrice, string bookingStatus)
+    {
+        Created = DateTime.UtcNow;
+        CheckIn = checkIn;
+        CheckOut = checkOut;
+        Guests = guests;
+        TotalPrice = totalPrice;
+        BookingStatus = bookingStatus;
+    }
 }

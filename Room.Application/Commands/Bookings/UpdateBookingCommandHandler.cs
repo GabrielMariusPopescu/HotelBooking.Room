@@ -6,7 +6,7 @@ public class UpdateBookingCommandHandler(IRepository<Booking> repository): IRequ
 {
     public async Task<Response<Booking>> Handle(UpdateBookingCommand request, CancellationToken cancellationToken)
     {
-        var existingBooking = await repository.Get(request.Id, includeRelations: false, cancellationToken);
+        var existingBooking = await repository.Get(request.Id, includeRelations: true, cancellationToken);
         if (existingBooking == null)
             return Response<Booking>.Failure($"Booking with '{request.Id}' identifier could not be found.");
 

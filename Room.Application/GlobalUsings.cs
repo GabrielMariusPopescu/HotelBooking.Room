@@ -3,11 +3,12 @@
 global using FluentValidation;
 global using MediatR;
 global using Microsoft.Extensions.DependencyInjection;
+global using Room.Application.Commands.Bookings;
 global using Room.Application.Commands.Rooms;
 global using Room.Application.Extensions;
 global using Room.Application.Repositories;
 global using Room.Application.Responses;
-global using Room.Application.Validators;
+global using Room.Application.Validators.Rooms;
 global using Room.Domain.Enums;
 global using Room.Domain.Models;
 global using System.ComponentModel.DataAnnotations;
