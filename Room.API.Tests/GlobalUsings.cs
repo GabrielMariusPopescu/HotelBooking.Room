@@ -18,6 +18,7 @@ global using Room.Application.Commands.Rooms;
 global using Room.Application.Extensions;
 global using Room.Application.Queries.Bookings;
 global using Room.Application.Queries.Rooms;
+global using Room.Application.Repositories;
 global using Room.Application.Requests.Bookings;
 global using Room.Application.Requests.Rooms;
 global using Room.Application.Responses;
