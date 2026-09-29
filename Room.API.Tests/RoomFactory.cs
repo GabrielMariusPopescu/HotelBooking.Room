@@ -33,4 +33,14 @@ public class RoomFactory : WebApplicationFactory<ApiMaker>
             context.Database.EnsureCreated();
         });
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (!disposing)
+            return;
+
+        _connection?.Close();
+        _connection?.Dispose();
+    }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Room.API.Tests.Integration;
 
 [ExcludeFromCodeCoverage]
-public class RoomsIntegrationTests(RoomFactory factory): IClassFixture<RoomFactory>, IAsyncDisposable
+public class RoomsIntegrationTests(RoomFactory factory): IClassFixture<RoomFactory>, IAsyncLifetime
 {
     private readonly HttpClient _client = factory.CreateClient();
 
@@ -10,11 +10,18 @@ public class RoomsIntegrationTests(RoomFactory factory): IClassFixture<RoomFacto
         using var scope = factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<RoomDbContext>();
 
+        dbContext.BookingItems.RemoveRange(dbContext.BookingItems);
         dbContext.Rooms.RemoveRange(dbContext.Rooms);
+
         await dbContext.SaveChangesAsync();
     }
-    
-    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+
+    public ValueTask DisposeAsync()
+    {
+        _client.Dispose();
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
 
     #region Create Room Tests
 
@@ -194,6 +201,162 @@ public class RoomsIntegrationTests(RoomFactory factory): IClassFixture<RoomFacto
         updateResponseMessage.IsSuccessStatusCode.Should().BeFalse();
         updateResponseMessage.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         error.Should().Contain("Wrong room type.");
+    }
+
+    #endregion
+
+    #region Delete Room Tests
+
+    [Fact]
+    public async Task DeleteRoom_WhenValidRequest_ReturnsSuccess()
+    {
+        // Arrange
+        CreateRoomRequest createRequest = new()
+        {
+            Name = "Room to be deleted",
+            Number = 101,
+            RoomType = RoomType.Apartment.GetDisplayName(),
+            RoomStatus = RoomStatus.Available.GetDisplayName(),
+            PricePerNight = 50.00M
+        };
+        var createResponseMessage = await _client.PostAsJsonAsync("/api/rooms", createRequest, TestContext.Current.CancellationToken);
+        var createdRoom = await createResponseMessage.Content.ReadFromJsonAsync<Domain.Models.Room>(TestContext.Current.CancellationToken);
+        createdRoom.Should().NotBeNull();
+
+        // Act
+        var deleteResponseMessage = await _client.DeleteAsync($"/api/rooms/{createdRoom.Id}", TestContext.Current.CancellationToken);
+        if (!deleteResponseMessage.IsSuccessStatusCode)
+        {
+            var error = await deleteResponseMessage.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+            throw new Exception($"API failed with {deleteResponseMessage.StatusCode}." +
+                                $"Details: {error}.");
+        }
+
+        // Assert
+        deleteResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task DeleteRoom_WhenInvalidRequest_ReturnsBadRequest()
+    {
+        // Arrange
+        var roomId = Guid.NewGuid();
+
+        // Act
+        var response = await _client.DeleteAsync($"/api/rooms/{roomId}", TestContext.Current.CancellationToken);
+        var error = string.Empty;
+        if (!response.IsSuccessStatusCode)
+            error = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+        
+        // Assert
+        response.IsSuccessStatusCode.Should().BeFalse();
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        error.Should().Contain("could not be found.");
+    }
+
+    #endregion
+
+    #region Get All Rooms Tests
+
+    [Fact]
+    public async Task GetRooms_WhenRoomsExists_ReturnsOkAndRooms()
+    {
+        // Arrange
+        CreateRoomRequest createRequest = new()
+        {
+            Name = "Room to be retrieved",
+            Number = 101,
+            RoomType = RoomType.Apartment.GetDisplayName(),
+            RoomStatus = RoomStatus.Available.GetDisplayName(),
+            PricePerNight = 50.00M
+        };
+        var createResponseMessage = await _client.PostAsJsonAsync("/api/rooms", createRequest, TestContext.Current.CancellationToken);
+        var createdRoom = await createResponseMessage.Content.ReadFromJsonAsync<Domain.Models.Room>(TestContext.Current.CancellationToken);
+        createdRoom.Should().NotBeNull();
+
+        // Act
+        var response = await _client.GetAsync("/api/rooms", TestContext.Current.CancellationToken);
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+            throw new Exception($"API failed with {response.StatusCode}." +
+                                $"Details: {error}.");
+        }
+        var rooms = await response.Content.ReadFromJsonAsync<IEnumerable<Domain.Models.Room>>(TestContext.Current.CancellationToken);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        rooms.Should().NotBeNull();
+        rooms.Should().ContainSingle(room => room.Id == createdRoom.Id);
+    }
+
+    [Fact]
+    public async Task GetRooms_WhenNoRoomsExists_ReturnsNotFound()
+    {
+        // Act
+        var response = await _client.GetAsync("/api/rooms", TestContext.Current.CancellationToken);
+        var error = string.Empty;
+        if (!response.IsSuccessStatusCode)
+            error = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        response.IsSuccessStatusCode.Should().BeFalse();
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        error.Should().Contain("No rooms were found.");
+    }
+
+    #endregion
+
+    #region Get Room Details Tests
+
+    [Fact]
+    public async Task GetRoom_WhenRoomExists_ReturnsOkAndRoom()
+    {
+        // Arrange
+        CreateRoomRequest createRequest = new()
+        {
+            Name = "Room to be retrieved",
+            Number = 101,
+            RoomType = RoomType.Apartment.GetDisplayName(),
+            RoomStatus = RoomStatus.Available.GetDisplayName(),
+            PricePerNight = 50.00M
+        };
+        var createResponseMessage = await _client.PostAsJsonAsync("/api/rooms", createRequest, TestContext.Current.CancellationToken);
+        var createdRoom = await createResponseMessage.Content.ReadFromJsonAsync<Domain.Models.Room>(TestContext.Current.CancellationToken);
+        createdRoom.Should().NotBeNull();
+
+        // Act
+        var response = await _client.GetAsync($"/api/rooms/{createdRoom.Id}", TestContext.Current.CancellationToken);
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+            throw new Exception($"API failed with {response.StatusCode}." +
+                                $"Details: {error}.");
+        }
+        var room = await response.Content.ReadFromJsonAsync<Domain.Models.Room>(TestContext.Current.CancellationToken);
+        
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        room.Should().NotBeNull();
+        room.Id.Should().Be(createdRoom.Id);
+    }
+
+    [Fact]
+    public async Task GetRoom_WhenRoomDoesNotExist_ReturnsNotFound()
+    {
+        // Arrange
+        var roomId = Guid.NewGuid();
+
+        // Act
+        var response = await _client.GetAsync($"/api/rooms/{roomId}", TestContext.Current.CancellationToken);
+        var error = string.Empty;
+        if (!response.IsSuccessStatusCode)
+            error = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        response.IsSuccessStatusCode.Should().BeFalse();
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        error.Should().Contain($"Room with '{roomId}' identifier was not found.");
     }
 
     #endregion
