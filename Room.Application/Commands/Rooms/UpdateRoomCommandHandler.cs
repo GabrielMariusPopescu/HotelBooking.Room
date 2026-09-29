@@ -13,11 +13,17 @@ public class UpdateRoomCommandHandler(IRepository<Domain.Models.Room> repository
         dbRoom.RoomType = request.RoomType.GetDisplayName();
         dbRoom.RoomStatus = request.RoomStatus.GetDisplayName();
         dbRoom.PricePerNight = request.PricePerNight;
-dbRoom.LastUpdated = DateTime.UtcNow;
+        dbRoom.LastUpdated = DateTime.UtcNow;
+        dbRoom.IsExcluded = request.IsExcluded;
 
-var updated = await repository.Update(dbRoom, cancellationToken);
-return updated
-    ? Response<Domain.Models.Room>.Success(dbRoom)
-    : Response<Domain.Models.Room>.Failure($"Room with '{request.Id}' identifier could not be updated.");
+        var validator = new UpdateRoomCommandValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            return Response<Domain.Models.Room>.Failure($"Errors: {string.Join(",", validationResult.Errors)}");
+
+        var updated = await repository.Update(dbRoom, cancellationToken);
+        return updated
+            ? Response<Domain.Models.Room>.Success(dbRoom)
+            : Response<Domain.Models.Room>.Failure($"Room with '{request.Id}' identifier could not be updated.");
     }
 }

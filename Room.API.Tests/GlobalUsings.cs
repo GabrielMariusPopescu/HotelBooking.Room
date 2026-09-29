@@ -24,3 +24,5 @@ global using Room.Application.Responses;
 global using Room.Domain.Enums;
 global using Room.Persistence;
 global using System.Diagnostics.CodeAnalysis;
+global using System.Net;
+global using System.Net.Http.Json;

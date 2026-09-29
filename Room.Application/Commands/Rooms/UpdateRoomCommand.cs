@@ -6,7 +6,9 @@ public class UpdateRoomCommand(
     int number,
     RoomType roomType,
     RoomStatus roomStatus,
-    decimal pricePerNight) : IRequest<Response<Domain.Models.Room>>
+    decimal pricePerNight,
+    bool isExcluded,
+    DateTime? lastUpdated) : IRequest<Response<Domain.Models.Room>>
 {
     public Guid Id { get; } = id;
 
@@ -19,4 +21,8 @@ public class UpdateRoomCommand(
     public RoomStatus RoomStatus { get; } = roomStatus;
 
     public decimal PricePerNight { get; } = pricePerNight;
+
+    public bool IsExcluded { get; } = isExcluded;
+
+    public DateTime? LastUpdated { get; } = lastUpdated;
 }

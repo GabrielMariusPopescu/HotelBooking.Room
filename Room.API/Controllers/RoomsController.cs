@@ -59,7 +59,9 @@ public class RoomsController(ISender mediator) : ControllerBase
             request.Number,
             Enum.Parse<RoomType>(request.RoomType),
             Enum.Parse<RoomStatus>(request.RoomStatus),
-            request.PricePerNight);
+            request.PricePerNight,
+            request.IsExcluded,
+            request.LastUpdated);
 
         var response = await mediator.Send(command);
         return response.IsSuccessful

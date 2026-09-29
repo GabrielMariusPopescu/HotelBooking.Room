@@ -13,4 +13,8 @@ public class UpdateRoomRequest
     public required string RoomStatus { get; set; }
 
     public required decimal PricePerNight { get; set; }
+
+    public bool IsExcluded { get; set; }
+
+    public DateTime? LastUpdated { get; set; }
 }

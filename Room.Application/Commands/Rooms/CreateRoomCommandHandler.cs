@@ -4,6 +4,11 @@ public class CreateRoomCommandHandler(IRepository<Domain.Models.Room> repository
 {
     public async Task<Response<Domain.Models.Room>> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
     {
+        var validator = new CreateRoomCommandValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            return Response<Domain.Models.Room>.Failure($"Errors: {string.Join(",", validationResult.Errors)}");
+        
         Domain.Models.Room room = new(
             request.Name,
             DateTime.UtcNow,
@@ -12,11 +17,10 @@ public class CreateRoomCommandHandler(IRepository<Domain.Models.Room> repository
             request.RoomStatus.GetDisplayName(),
             request.PricePerNight,
             false);
-        {
+        
             var dbRoom = await repository.Add(room, cancellationToken);
             return dbRoom != null
                 ? Response<Domain.Models.Room>.Success(dbRoom)
                 : Response<Domain.Models.Room>.Failure($"Room '{request.Name}' could not be created.");
-        }
-    }
+}
 }
