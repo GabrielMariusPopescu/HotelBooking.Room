@@ -37,7 +37,7 @@ public class RoomsControllerTests
             request.PricePerNight,
             false);
 
-        var response = Response<Domain.Models.Room>.Success(room);
+        var response = RoomResponse<Domain.Models.Room>.Success(room);
 
         _mediatorMock
             .Setup(sender => sender.Send(It.IsAny<CreateRoomCommand>(), It.IsAny<CancellationToken>()))
@@ -77,7 +77,7 @@ public class RoomsControllerTests
             RoomStatus = RoomStatus.Available.GetDisplayName()
         };
 
-        var response = Response<Domain.Models.Room>.Failure($"Create {request.Name} room failed.");
+        var response = RoomResponse<Domain.Models.Room>.Failure($"Create {request.Name} room failed.");
 
         _mediatorMock
             .Setup(sender => sender.Send(It.IsAny<CreateRoomCommand>(), It.IsAny<CancellationToken>()))
@@ -132,7 +132,7 @@ public class RoomsControllerTests
             request.PricePerNight, 
             false);
 
-        var response = Response<Domain.Models.Room>.Success(room);
+        var response = RoomResponse<Domain.Models.Room>.Success(room);
 
         _mediatorMock
             .Setup(repository => repository.Send(It.IsAny<UpdateRoomCommand>(), It.IsAny<CancellationToken>()))
@@ -175,7 +175,7 @@ public class RoomsControllerTests
             RoomStatus = RoomStatus.Available.GetDisplayName()
         };
 
-        var response = Response<Domain.Models.Room>.Failure($"Update {request.Id} room failed.");
+        var response = RoomResponse<Domain.Models.Room>.Failure($"Update {request.Id} room failed.");
 
         _mediatorMock
             .Setup(sender => sender.Send(It.IsAny<UpdateRoomCommand>(), It.IsAny<CancellationToken>()))
@@ -212,7 +212,7 @@ public class RoomsControllerTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        var response = Response<Guid>.Success(id);
+        var response = RoomResponse<Guid>.Success(id);
 
         _mediatorMock
             .Setup(sender => sender.Send(It.Is<DeleteRoomCommand>(command => command.Id == id), It.IsAny<CancellationToken>()))
@@ -238,7 +238,7 @@ _mediatorMock
     {
         // Arrange
         var id = Guid.NewGuid();
-        var response = Response<Guid>.Failure($"Room with '{id}' identifier was not found.");
+        var response = RoomResponse<Guid>.Failure($"Room with '{id}' identifier was not found.");
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -270,7 +270,7 @@ _mediatorMock
     {
         // Arrange
         List<Domain.Models.Room> rooms = [new Domain.Models.Room()];
-        var response = Response<IEnumerable<Domain.Models.Room>>.Success(rooms);
+        var response = RoomResponse<IEnumerable<Domain.Models.Room>>.Success(rooms);
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -298,7 +298,7 @@ _mediatorMock
     public async Task GetRooms_WhenNoneExisting_SendQueryAndReturnsFailure()
     {
         // Arrange
-        var response = Response<IEnumerable<Domain.Models.Room>>.Failure("No rooms was found.");
+        var response = RoomResponse<IEnumerable<Domain.Models.Room>>.Failure("No rooms was found.");
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -333,7 +333,7 @@ _mediatorMock
         // Arrange
         var id = Guid.NewGuid();
         Domain.Models.Room room = new();
-        var response = Response<Domain.Models.Room>.Success(room);
+        var response = RoomResponse<Domain.Models.Room>.Success(room);
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -362,7 +362,7 @@ _mediatorMock
     {
         // Arrange
         var id = Guid.NewGuid();
-        var response = Response<Domain.Models.Room>.Failure($"Room with '{id}' identifier not found.");
+        var response = RoomResponse<Domain.Models.Room>.Failure($"Room with '{id}' identifier not found.");
 
         _mediatorMock
             .Setup(sender => sender.Send(

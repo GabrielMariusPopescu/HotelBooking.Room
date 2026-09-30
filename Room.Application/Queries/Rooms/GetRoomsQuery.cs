@@ -1,3 +1,3 @@
 ﻿namespace Room.Application.Queries.Rooms;
 
-public class GetRoomsQuery : IRequest<Response<IEnumerable<Domain.Models.Room>>>;
+public class GetRoomsQuery : IRequest<RoomResponse<IEnumerable<Domain.Models.Room>>>;

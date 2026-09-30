@@ -1,6 +1,6 @@
 ﻿namespace Room.Application.Responses;
 
-public class Response<T>
+public class RoomResponse<T>
 {
     public bool IsSuccessful { get; private set; }
 
@@ -8,14 +8,14 @@ public class Response<T>
 
     public T? Data { get; private set; }
 
-    private Response(bool isSuccessful, string message, T? data)
+    private RoomResponse(bool isSuccessful, string message, T? data)
     {
         IsSuccessful = isSuccessful;
         Message = message;
         Data = data;
     }
 
-    public static Response<T> Success(T data) => new(true, string.Empty, data);
+    public static RoomResponse<T> Success(T data) => new(true, string.Empty, data);
 
-    public static Response<T> Failure(string message) => new(false, message, default);
+    public static RoomResponse<T> Failure(string message) => new(false, message, default);
 }

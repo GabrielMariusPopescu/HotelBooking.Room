@@ -1,12 +1,12 @@
 ﻿namespace Room.Application.Queries.Bookings;
 
-public class GetBookingsQueryHandler(IRepository<Booking> repository): IRequestHandler<GetBookingsQuery, Response<IEnumerable<Booking>>>
+public class GetBookingsQueryHandler(IRepository<Booking> repository): IRequestHandler<GetBookingsQuery, RoomResponse<IEnumerable<Booking>>>
 {
-    public async Task<Response<IEnumerable<Booking>>> Handle(GetBookingsQuery request, CancellationToken cancellationToken)
+    public async Task<RoomResponse<IEnumerable<Booking>>> Handle(GetBookingsQuery request, CancellationToken cancellationToken)
     {
         var bookings = (await repository.Get(cancellationToken)).ToList();
         return bookings.Any()
-            ? Response<IEnumerable<Booking>>.Success(bookings)
-            : Response<IEnumerable<Booking>>.Failure("No bookings found.");
+            ? RoomResponse<IEnumerable<Booking>>.Success(bookings)
+            : RoomResponse<IEnumerable<Booking>>.Failure("No bookings found.");
     }
 }

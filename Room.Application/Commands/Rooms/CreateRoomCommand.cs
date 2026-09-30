@@ -5,7 +5,7 @@ public class CreateRoomCommand(
     int number,
     RoomType roomType,
     RoomStatus roomStatus,
-    decimal pricePerNight) : IRequest<Response<Domain.Models.Room>>
+    decimal pricePerNight) : IRequest<RoomResponse<Domain.Models.Room>>
 {
     public string Name { get; } = name;
 

@@ -29,7 +29,7 @@ public class BookingsControllerTests
 
         var booking = new Domain.Models.Booking(request.CheckIn, request.CheckOut, request.Guests);
 
-        var response = Response<Domain.Models.Booking>.Success(booking);
+        var response = RoomResponse<Domain.Models.Booking>.Success(booking);
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -69,7 +69,7 @@ public class BookingsControllerTests
             RoomIds = [Guid.NewGuid()]
         };
 
-        var response = Response<Domain.Models.Booking>.Failure($"Create {request} booking failed.");
+        var response = RoomResponse<Domain.Models.Booking>.Failure($"Create {request} booking failed.");
 
         _mediatorMock
             .Setup(sender => sender.Send(It.IsAny<CreateBookingCommand>(), It.IsAny<CancellationToken>()))
@@ -118,7 +118,7 @@ public class BookingsControllerTests
             request.CheckOut,
             request.Guests);
 
-        var response = Response<Domain.Models.Booking>.Success(booking);
+        var response = RoomResponse<Domain.Models.Booking>.Success(booking);
 
         _mediatorMock
             .Setup(repository => repository.Send(
@@ -161,7 +161,7 @@ public class BookingsControllerTests
             BookingStatus = BookingStatus.Confirmed.GetDisplayName()
         };
 
-        var response = Response<Domain.Models.Booking>.Failure($"Update {request.Id} booking failed.");
+        var response = RoomResponse<Domain.Models.Booking>.Failure($"Update {request.Id} booking failed.");
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -199,7 +199,7 @@ public class BookingsControllerTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        var response = Response<Guid>.Success(id);
+        var response = RoomResponse<Guid>.Success(id);
 
         _mediatorMock
             .Setup(sender => sender.Send(It.Is<DeleteBookingCommand>(command => command.Id == id), It.IsAny<CancellationToken>()))
@@ -225,7 +225,7 @@ public class BookingsControllerTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        var response = Response<Guid>.Failure($"Booking with '{id}' identifier was not found.");
+        var response = RoomResponse<Guid>.Failure($"Booking with '{id}' identifier was not found.");
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -257,7 +257,7 @@ public class BookingsControllerTests
     {
         // Arrange
         List<Domain.Models.Booking> bookings = [new Domain.Models.Booking()];
-        var response = Response<IEnumerable<Domain.Models.Booking>>.Success(bookings);
+        var response = RoomResponse<IEnumerable<Domain.Models.Booking>>.Success(bookings);
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -285,7 +285,7 @@ public class BookingsControllerTests
     public async Task GetBookings_WhenNoneExisting_SendQueryAndReturnsFailure()
     {
         // Arrange
-        var response = Response<IEnumerable<Domain.Models.Booking>>.Failure("No bookings was found.");
+        var response = RoomResponse<IEnumerable<Domain.Models.Booking>>.Failure("No bookings was found.");
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -320,7 +320,7 @@ public class BookingsControllerTests
         // Arrange
         var id = Guid.NewGuid();
         Domain.Models.Booking booking = new();
-        var response = Response<Domain.Models.Booking>.Success(booking);
+        var response = RoomResponse<Domain.Models.Booking>.Success(booking);
 
         _mediatorMock
             .Setup(sender => sender.Send(
@@ -349,7 +349,7 @@ public class BookingsControllerTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        var response = Response<Domain.Models.Booking>.Failure($"Booking with '{id}' identifier not found.");
+        var response = RoomResponse<Domain.Models.Booking>.Failure($"Booking with '{id}' identifier not found.");
 
         _mediatorMock
             .Setup(sender => sender.Send(

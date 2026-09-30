@@ -2,18 +2,18 @@
 
 namespace Room.Application.Commands.Bookings;
 
-public class UpdateBookingCommandHandler(IRepository<Booking> repository): IRequestHandler<UpdateBookingCommand, Response<Booking>>
+public class UpdateBookingCommandHandler(IRepository<Booking> repository): IRequestHandler<UpdateBookingCommand, RoomResponse<Booking>>
 {
-    public async Task<Response<Booking>> Handle(UpdateBookingCommand request, CancellationToken cancellationToken)
+    public async Task<RoomResponse<Booking>> Handle(UpdateBookingCommand request, CancellationToken cancellationToken)
     {
         var existingBooking = await repository.Get(request.Id, includeRelations: true, cancellationToken);
         if (existingBooking == null)
-            return Response<Booking>.Failure($"Booking with '{request.Id}' identifier could not be found.");
+            return RoomResponse<Booking>.Failure($"Booking with '{request.Id}' identifier could not be found.");
 
         var lockedRoomIds = existingBooking.BookingItems.Select(bookingItem => bookingItem.RoomId);
         var overlappingBookingExists = await OverlappingBookingExists(lockedRoomIds, request, cancellationToken);
         if(overlappingBookingExists)
-            return Response<Booking>.Failure("The updated dates conflict with an existing reservation for these rooms.");
+            return RoomResponse<Booking>.Failure("The updated dates conflict with an existing reservation for these rooms.");
 
         var stayDurationDays = request.CheckOut.DayNumber - request.CheckIn.DayNumber;
         var totalPrice = existingBooking.BookingItems.Sum(bookingItem => bookingItem.PricePerNight) * stayDurationDays;
@@ -27,8 +27,8 @@ public class UpdateBookingCommandHandler(IRepository<Booking> repository): IRequ
 
         var updated = await repository.Update(existingBooking, cancellationToken);
         return updated
-            ? Response<Booking>.Success(existingBooking)
-            : Response<Booking>.Failure($"Booking with '{request.Id}' identifier cannot be updated.");
+            ? RoomResponse<Booking>.Success(existingBooking)
+            : RoomResponse<Booking>.Failure($"Booking with '{request.Id}' identifier cannot be updated.");
     }
 
     private async Task<bool> OverlappingBookingExists(IEnumerable<Guid> lockedRoomIds,

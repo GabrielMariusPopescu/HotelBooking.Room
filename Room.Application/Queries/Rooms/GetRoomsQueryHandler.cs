@@ -1,12 +1,12 @@
 ﻿namespace Room.Application.Queries.Rooms;
 
-public class GetRoomsQueryHandler(IRepository<Domain.Models.Room> repository): IRequestHandler<GetRoomsQuery, Response<IEnumerable<Domain.Models.Room>>>
+public class GetRoomsQueryHandler(IRepository<Domain.Models.Room> repository): IRequestHandler<GetRoomsQuery, RoomResponse<IEnumerable<Domain.Models.Room>>>
 {
-    public async Task<Response<IEnumerable<Domain.Models.Room>>> Handle(GetRoomsQuery request, CancellationToken cancellationToken)
+    public async Task<RoomResponse<IEnumerable<Domain.Models.Room>>> Handle(GetRoomsQuery request, CancellationToken cancellationToken)
     {
         var rooms = (await repository.Get(cancellationToken)).ToList();
         return rooms.Any()
-            ? Response<IEnumerable<Domain.Models.Room>>.Success(rooms)
-            : Response<IEnumerable<Domain.Models.Room>>.Failure("No rooms were found.");
+            ? RoomResponse<IEnumerable<Domain.Models.Room>>.Success(rooms)
+            : RoomResponse<IEnumerable<Domain.Models.Room>>.Failure("No rooms were found.");
     }
 }

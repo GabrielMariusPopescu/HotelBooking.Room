@@ -1,12 +1,12 @@
 ﻿namespace Room.Application.Commands.Rooms;
 
-public class UpdateRoomCommandHandler(IRepository<Domain.Models.Room> repository): IRequestHandler<UpdateRoomCommand, Response<Domain.Models.Room>>
+public class UpdateRoomCommandHandler(IRepository<Domain.Models.Room> repository): IRequestHandler<UpdateRoomCommand, RoomResponse<Domain.Models.Room>>
 {
-    public async Task<Response<Domain.Models.Room>> Handle(UpdateRoomCommand request, CancellationToken cancellationToken)
+    public async Task<RoomResponse<Domain.Models.Room>> Handle(UpdateRoomCommand request, CancellationToken cancellationToken)
     {
         var dbRoom = await repository.Get(request.Id, includeRelations: false,  cancellationToken);
         if (dbRoom == null)
-            return Response<Domain.Models.Room>.Failure($"Room with '{request.Id}' identifier could not be found.");
+            return RoomResponse<Domain.Models.Room>.Failure($"Room with '{request.Id}' identifier could not be found.");
         
         dbRoom.Name = request.Name;
         dbRoom.Number = request.Number;
@@ -19,11 +19,11 @@ public class UpdateRoomCommandHandler(IRepository<Domain.Models.Room> repository
         var validator = new UpdateRoomCommandValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
-            return Response<Domain.Models.Room>.Failure($"Errors: {string.Join(",", validationResult.Errors)}");
+            return RoomResponse<Domain.Models.Room>.Failure($"Errors: {string.Join(",", validationResult.Errors)}");
 
         var updated = await repository.Update(dbRoom, cancellationToken);
         return updated
-            ? Response<Domain.Models.Room>.Success(dbRoom)
-            : Response<Domain.Models.Room>.Failure($"Room with '{request.Id}' identifier could not be updated.");
+            ? RoomResponse<Domain.Models.Room>.Success(dbRoom)
+            : RoomResponse<Domain.Models.Room>.Failure($"Room with '{request.Id}' identifier could not be updated.");
     }
 }

@@ -6,7 +6,7 @@
 public class RoomsController(ISender mediator) : ControllerBase
 {
     [HttpPost]
-    [ProducesResponseType(typeof(Response<Domain.Models.Room>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<Domain.Models.Room>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateRoom([FromBody] CreateRoomRequest request)
     {
@@ -24,7 +24,7 @@ public class RoomsController(ISender mediator) : ControllerBase
     }
     
     [HttpGet]
-    [ProducesResponseType(typeof(Response<IEnumerable<Domain.Models.Room>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<IEnumerable<Domain.Models.Room>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetRooms()
     {
@@ -36,7 +36,7 @@ public class RoomsController(ISender mediator) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(Response<Domain.Models.Room>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<Domain.Models.Room>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetRoom([FromRoute]Guid id)
     {
@@ -48,7 +48,7 @@ public class RoomsController(ISender mediator) : ControllerBase
     }
     
     [HttpPut("{id:guid}")]
-    [ProducesResponseType(typeof(Response<Domain.Models.Room>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<Domain.Models.Room>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateRoom(Guid id, [FromBody] UpdateRoomRequest request)
     {
@@ -70,7 +70,7 @@ public class RoomsController(ISender mediator) : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    [ProducesResponseType(typeof(Response<Domain.Models.Room>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<Domain.Models.Room>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteRoom([FromRoute]Guid id)
     {

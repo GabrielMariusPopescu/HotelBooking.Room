@@ -3,20 +3,20 @@
 public class CreateBookingCommandHandler(
     IRepository<Booking> bookingRepository,
     IRepository<Domain.Models.Room> roomRepository)
-    : IRequestHandler<CreateBookingCommand, Response<Booking>>
+    : IRequestHandler<CreateBookingCommand, RoomResponse<Booking>>
 {
-    public async Task<Response<Booking>> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
+    public async Task<RoomResponse<Booking>> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
     {
         var overlappingBookingExists = await OverlappingBookingExists(request, cancellationToken);
         if (overlappingBookingExists)
-            return Response<Booking>.Failure("One or more requested rooms are already booked for the selected dates.");
+            return RoomResponse<Booking>.Failure("One or more requested rooms are already booked for the selected dates.");
         
         var rooms = (await roomRepository.Get(cancellationToken))
             .Where(room => request.RoomIds.Contains(room.Id))
             .ToList();
         
         if (rooms.Count != request.RoomIds.Count())
-            return Response<Booking>.Failure("One or more requested rooms do not exist.");
+            return RoomResponse<Booking>.Failure("One or more requested rooms do not exist.");
         
         var (totalPrice, bookingItems) = BookItems(request, rooms);
 
@@ -32,8 +32,8 @@ public class CreateBookingCommandHandler(
 
         var dbBooking = await bookingRepository.Add(booking, cancellationToken);
         return dbBooking != null
-            ? Response<Booking>.Success(dbBooking)
-            : Response<Booking>.Failure($"Booking could not be created.");
+            ? RoomResponse<Booking>.Success(dbBooking)
+            : RoomResponse<Booking>.Failure($"Booking could not be created.");
     }
 
     private async Task<bool> OverlappingBookingExists(CreateBookingCommand request, CancellationToken cancellationToken) =>

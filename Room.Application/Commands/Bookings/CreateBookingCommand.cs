@@ -4,7 +4,7 @@ public class CreateBookingCommand(
     DateOnly checkIn,
     DateOnly checkOut,
     int guests,
-    IEnumerable<Guid> roomIds) : IRequest<Response<Booking>>
+    IEnumerable<Guid> roomIds) : IRequest<RoomResponse<Booking>>
 {
     public DateOnly CheckIn { get; set; } = checkIn;
 

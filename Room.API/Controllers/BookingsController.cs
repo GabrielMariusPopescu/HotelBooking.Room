@@ -6,7 +6,7 @@
 public class BookingsController(ISender mediator) : ControllerBase
 {
     [HttpPost]
-    [ProducesResponseType(typeof(Response<Booking>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<Booking>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateBooking([FromBody] CreateBookingRequest request)
     {
@@ -23,7 +23,7 @@ public class BookingsController(ISender mediator) : ControllerBase
     }
     
     [HttpGet]
-    [ProducesResponseType(typeof(Response<IEnumerable<Booking>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<IEnumerable<Booking>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBookings()
     {
@@ -35,7 +35,7 @@ public class BookingsController(ISender mediator) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(Response<Booking>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<Booking>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBooking([FromRoute]Guid id)
     {
@@ -47,7 +47,7 @@ public class BookingsController(ISender mediator) : ControllerBase
     }
     
     [HttpPut("{id:guid}")]
-    [ProducesResponseType(typeof(Response<Booking>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<Booking>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateBooking(Guid id, [FromBody] UpdateBookingRequest request)
     {
@@ -67,7 +67,7 @@ public class BookingsController(ISender mediator) : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    [ProducesResponseType(typeof(Response<Booking>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RoomResponse<Booking>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteBooking([FromRoute]Guid id)
     {

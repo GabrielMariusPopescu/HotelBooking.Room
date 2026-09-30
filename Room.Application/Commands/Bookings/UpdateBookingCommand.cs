@@ -6,7 +6,7 @@ public class UpdateBookingCommand(
     DateOnly checkOut,
     int guests,
     decimal totalPrice,
-    BookingStatus bookingStatus) : IRequest<Response<Booking>>
+    BookingStatus bookingStatus) : IRequest<RoomResponse<Booking>>
 {
     public Guid Id { get; set; } = id;
     
