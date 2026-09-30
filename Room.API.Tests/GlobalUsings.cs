@@ -26,5 +26,6 @@ global using Room.Domain.Enums;
 global using Room.Domain.Models;
 global using Room.Persistence;
 global using System.Diagnostics.CodeAnalysis;
+global using System.Linq.Expressions;
 global using System.Net;
 global using System.Net.Http.Json;
